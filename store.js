@@ -18,7 +18,7 @@ function Store(name) {
   var initialized = false;
   reconnect(function (stream) {
     debug('connected');
-    // handshake with server os it knows what store we're working on
+    // handshake with server so it knows what store we're working on
     stream.write(name);
 
     stream.pipe(model.createStream()).pipe(stream);
