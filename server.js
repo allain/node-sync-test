@@ -1,10 +1,6 @@
 var shoe = require('shoe');
 var Model = require('gossip-object');
 
-var fs = require('fs');
-
-var targets = {};
-
 var debug = require('debug')('sync-server');
 
 var express = require('express');
@@ -12,17 +8,14 @@ var app = express();
 
 app.use(express.static(__dirname + '/public/'));
 
-app.get('/', function (req, res) {
-  fs.createReadStream(__dirname + '/index.html').pipe(res);
-  req.resume();
-});
-
 var server = app.listen(3000, function () {
   var host = server.address().address;
   var port = server.address().port;
 
   console.log('Example app listening at http://%s:%s', host, port);
 });
+
+var targets = {};
 
 shoe(function (stream) {
   stream.on('data', targetScuttlebutt);

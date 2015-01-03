@@ -1,11 +1,12 @@
 {
   "name": "sync-test",
   "version": "0.1.0",
-  "description": "Testing the practicality of using scuttlebutt to provide offline synchingronization for browsers.",
+  "description": "Testing the practicality of using scuttlebutt to provide offline synchonization for browsers.",
   "main": "index.js",
   "scripts": {
     "watch": "watchify -o public/bundle.js client.js",
-    "build": "browserify -o public/bundle.js client.js"
+    "build": "browserify -o public/bundle.js client.js",
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
