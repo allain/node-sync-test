@@ -6,7 +6,8 @@
   "scripts": {
     "watch": "watchify -o public/bundle.js client.js",
     "build": "browserify -o public/bundle.js client.js",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "test": "mocha tests"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,9 @@
     "shoe": "0.0.15"
   },
   "devDependencies": {
+    "chai": "^1.10.0",
+    "gossip-object-diff": "^0.1.0",
+    "jiff": "^0.7.0",
     "reconnect": "^2.0.2"
   }
 }

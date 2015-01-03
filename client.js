@@ -1,18 +1,13 @@
 //client
 var debug = require('debug')('sync-client');
-var reconnect = require('reconnect');
-var Model = require('gossip-object');
 
+var Store = require('./store');
 
-var model = window.model = new Model();
-model.on('change', function() {
-  debug('model changed', this.toJSON());
+var store = window.test = new Store('test');
+
+store.on('ready', function() {
+  debug('store ready');
 });
-
-reconnect(function (stream) {
-  debug('connected');
-  stream.write('test');
-
-  stream.pipe(model.createStream()).pipe(stream);
-  debug('suttlebutt setup');
-}).connect('/sync');
+store.on('change', function(newValue) {
+  debug('store changed', newValue);
+});
