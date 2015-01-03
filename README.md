@@ -1,6 +1,6 @@
 # sync-test
 
-Testing the practicality of using scuttlebutt to provide offline synchingronization for browsers.
+Testing the practicality of using scuttlebutt to provide offline synchronization for browsers.
 
 
 ## Trying it out
