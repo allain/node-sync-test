@@ -1,0 +1,31 @@
+{
+  "name": "sync-test",
+  "version": "0.1.0",
+  "description": "Testing the practicality of using scuttlebutt to provide offline synchingronization for browsers.",
+  "main": "index.js",
+  "scripts": {
+    "watch": "watchify -o public/bundle.js client.js",
+    "build": "browserify -o public/bundle.js client.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/allain/node-sync-test"
+  },
+  "keywords": [
+    "scuttlebutt browser synchronization"
+  ],
+  "author": "Allain Lalonde <allain.lalonde@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/allain/node-sync-test/issues"
+  },
+  "dependencies": {
+    "debug": "^2.1.1",
+    "express": "^4.10.6",
+    "gossip-object": "^2.3.3",
+    "shoe": "0.0.15"
+  },
+  "devDependencies": {
+    "reconnect": "^2.0.2"
+  }
+}
