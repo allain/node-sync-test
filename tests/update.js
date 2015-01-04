@@ -37,20 +37,4 @@ describe('store.update', function() {
     store.update(doc);
     assert.deepEqual(store.toJSON(), doc);
   });
-
-  it('does not support arrays', function() {
-    try {
-      store.update({a: []});
-      assert(false);
-    } catch(e) {
-      assert.equal(e.message, 'arrays not supported');
-    }
-
-    try {
-      store.update({a: {b: [1, 2]}});
-      assert(false);
-    } catch(e) {
-      assert.equal(e.message, 'arrays not supported');
-    }
-  });
 });

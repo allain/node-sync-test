@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "watchify -o public/bundle.js client.js",
     "build": "browserify -o public/bundle.js client.js",
-    "start": "nodemon server.js",
+    "start": "nodemon --ignore public/ server.js",
     "test": "mocha tests"
   },
   "repository": {
@@ -22,15 +22,20 @@
     "url": "https://github.com/allain/node-sync-test/issues"
   },
   "dependencies": {
+    "browserify-middleware": "^4.1.0",
     "debug": "^2.1.1",
     "express": "^4.10.6",
     "gossip-object": "^2.3.3",
-    "shoe": "0.0.15"
+    "mux-demux": "^3.7.9",
+    "shoe": "0.0.15",
+    "stream-router": "^0.1.0",
+    "through2": "^0.6.3"
   },
   "devDependencies": {
     "chai": "^1.10.0",
     "gossip-object-diff": "^0.1.0",
     "jiff": "^0.7.0",
+    "localstorage-scuttlebutt": "^2.0.1",
     "reconnect": "^2.0.2"
   }
 }
