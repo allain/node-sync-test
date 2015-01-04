@@ -18,11 +18,7 @@ var server = app.listen(3000, function () {
 var targets = {};
 
 shoe(function (stream) {
-  stream.on('data', targetScuttlebutt);
-
-  function targetScuttlebutt(targetName) {
-    stream.removeListener('data', targetScuttlebutt);
-
+  stream.once('data', function(targetName) {
     var target = targets[targetName];
     if (target) {
       model = target.model;
@@ -36,7 +32,7 @@ shoe(function (stream) {
     }
 
     stream.pipe(model.createStream()).pipe(stream);
-  }
+  });
 }).install(server, '/sync');
 
 server.listen(3000);

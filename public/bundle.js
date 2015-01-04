@@ -6356,9 +6356,11 @@ var Model = require('gossip-object');
 var diff = require('gossip-object-diff');
 var reconnect = require('reconnect');
 
-function Store(name) {
+function Store(name, endPoint) {
   if (typeof name !== 'string') throw new Error('store must be given a name');
   if (!/^[a-z][a-z0-9]*$/.test(name)) throw new Error('Invalid store name given');
+
+  endPoint = endPoint || '/sync';
 
   var debug = require('debug')('store:' + name);
 
@@ -6378,7 +6380,7 @@ function Store(name) {
       store.emit('ready');
       initialized = false;
     }
-  }).connect('/sync');
+  }).connect(endPoint);
 
   store.update = function(newDoc) {
     diff(model.toJSON(), newDoc).forEach(function(op) {
