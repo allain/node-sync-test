@@ -142,9 +142,7 @@ function buildMongoStore(name) {
 
   return {
     get: function(key, cb) {
-      debug('querying mongo');
       collection.findOne({key: key}, function(err, doc) {
-        debug('mongo error', err);
         if (err) return cb(err);
         cb(null, doc ? doc.val : null);
       });

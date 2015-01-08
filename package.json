@@ -1,10 +1,11 @@
 {
   "name": "sync-test",
   "version": "0.1.0",
-  "description": "Testing the practicality of using scuttlebutt to provide offline synchonization for browsers.",
+  "description": "Testing the practicality of different approachs to synchronization.",
   "main": "index.js",
   "scripts": {
-    "start": "DEBUG=* node server.js",
+    "start": "NODE_ENV=production node server.js",
+    "dev": "NODE_ENV=development node server.js",
     "test": "mocha tests"
   },
   "repository": {
@@ -12,7 +13,7 @@
     "url": "https://github.com/allain/node-sync-test"
   },
   "keywords": [
-    "scuttlebutt browser synchronization"
+    "synchronization"
   ],
   "author": "Allain Lalonde <allain.lalonde@gmail.com>",
   "license": "ISC",
