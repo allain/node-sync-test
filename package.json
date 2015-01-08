@@ -4,7 +4,7 @@
   "description": "Testing the practicality of using scuttlebutt to provide offline synchonization for browsers.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --ignore public/ server.js",
+    "start": "node server.js",
     "test": "mocha tests"
   },
   "repository": {
