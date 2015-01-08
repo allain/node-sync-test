@@ -5,7 +5,6 @@ var reconnect = require('reconnect');
 var inherits = require('util').inherits;
 var jiff = require('jiff');
 var MuxDemux = require('mux-demux');
-var stdout = require('stdout');
 var through2 = require('through2');
 var jsonPatchStream = require('json-patch-stream');
 
