@@ -1,7 +1,7 @@
 var shoe = require('shoe');
 var mongojs = require('mongojs');
 
-var db = mongojs(process.env.mongodb || 'localhost/sync-test');
+var db = mongojs(process.env.MONGOLAB_URI || 'localhost/sync-test');
 
 var Synopsis = require('synopsis');
 var debug = require('debug')('sync-server');
