@@ -1,10 +1,13 @@
 module.exports = Store;
 
 var EventEmitter = require('events').EventEmitter;
-var Model = require('scuttle-patch');
 var reconnect = require('reconnect');
 var inherits = require('util').inherits;
+var jiff = require('jiff');
 var MuxDemux = require('mux-demux');
+var stdout = require('stdout');
+var through2 = require('through2');
+var jsonPatchStream = require('json-patch-stream');
 
 inherits(Store, EventEmitter);
 
@@ -17,23 +20,12 @@ function Store(name, endPoint) {
 
   var self = this;
 
+  var doc = JSON.parse(localStorage['store-' + name] || '{}');
+  var patchCount = parseInt(localStorage['store-' + name + '-end'] || '0', 10) || 0;
+
   endPoint = endPoint || '/sync';
 
   var debug = require('debug')('store:' + name);
-
-  var model = new Model({
-    persist: {
-      set: function(key, val) {
-        localStorage[name + '-' + key] = JSON.stringify(val);
-      },
-      get: function(key) {
-        var val = localStorage[name + '-' + key];
-        if (val) {
-          return JSON.parse(val);
-        }
-      }
-    }
-  });
 
   var initialized = false;
 
@@ -41,16 +33,34 @@ function Store(name, endPoint) {
     error: false
   });
 
+  var patchStream;
   reconnect(function (stream) {
     stream.pipe(mdm).pipe(stream);
 
-    var scuttleStream = mdm.createStream(name);
+    patchStream = mdm.createStream(name + '/' + patchCount);
 
-    var modelStream = model.createStream();
-    modelStream.on('error', debug);
+    this.patchStream = patchStream;
+    patchStream
+    .pipe(through2.obj(function(update, enc, next) {
+      // update = [patch, end]
+      debug('update received', update);
 
-    scuttleStream.pipe(modelStream).pipe(scuttleStream);
-    debug('scuttlebutt piping');
+      this.push(update[0]);
+      localStorage['store-' + name + '-end'] = update[1];
+      next();
+    }))
+    .pipe(jsonPatchStream.toDocs(doc))
+    .pipe(through2.obj(function(newDoc, enc, next) {
+      localStorage['store-' + name] = JSON.stringify(newDoc);
+      doc = newDoc;
+
+      self.emit('change', doc);
+      next();
+    }));
+
+    patchStream.on('error', function(err) {
+      console.log(err);
+    });
 
     if (!initialized) {
       self.emit('ready');
@@ -58,14 +68,18 @@ function Store(name, endPoint) {
     }
   }).connect(endPoint);
 
-
   this.update = function(newDoc) {
-    model.update(newDoc);
+    try {
+      var patch = jiff.diff(doc, newDoc, function(obj) {
+        return obj.id || obj._id || obj.hash || JSON.stringify(obj);
+      });
+
+      var written = patchStream.write(patch);
+      if (!written) {
+        debug('error writing patch to stream');
+      }
+    } catch (e) {
+      debug('unable to generate patch', e);
+    }
   };
-
-  this.toJSON = model.toJSON.bind(model);
-
-  model.on('change', function() {
-    self.emit('change', self.toJSON());
-  });
 }

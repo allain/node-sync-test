@@ -4,8 +4,6 @@
   "description": "Testing the practicality of using scuttlebutt to provide offline synchonization for browsers.",
   "main": "index.js",
   "scripts": {
-    "watch": "watchify -o public/bundle.js client.js",
-    "build": "browserify -o public/bundle.js client.js",
     "start": "nodemon --ignore public/ server.js",
     "test": "mocha tests"
   },
@@ -25,17 +23,18 @@
     "browserify-middleware": "^4.1.0",
     "debug": "^2.1.1",
     "express": "^4.10.6",
-    "gossip-object": "^2.3.3",
+    "jiff": "^0.7.0",
+    "json-patch-stream": "^0.1.0",
+    "mongojs": "^0.18.0",
     "mux-demux": "^3.7.9",
     "shoe": "0.0.15",
     "stream-router": "^0.1.0",
+    "synopsis": "~0.4.1",
     "through2": "^0.6.3"
   },
   "devDependencies": {
     "chai": "^1.10.0",
-    "gossip-object-diff": "^0.1.0",
-    "jiff": "^0.7.0",
-    "localstorage-scuttlebutt": "^2.0.1",
-    "reconnect": "^2.0.2"
+    "reconnect": "^2.0.2",
+    "stdout": "0.0.3"
   }
 }
