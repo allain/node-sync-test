@@ -45,6 +45,8 @@ function Store(name, endPoint) {
       // update = [patch, end]
       debug('update received', update);
 
+      self.emit('patch', update);
+
       this.push(update[0]);
       localStorage['store-' + name + '-end'] = update[1];
       next();

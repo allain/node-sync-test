@@ -1,6 +1,8 @@
 var shoe = require('shoe');
 var mongojs = require('mongojs');
-var db = mongojs('localhost/sync-test');
+
+var db = mongojs(process.env.mongodb || 'localhost/sync-test');
+
 var Synopsis = require('synopsis');
 var debug = require('debug')('sync-server');
 var jiff = require('jiff');
@@ -17,7 +19,7 @@ var streamRouter = require('stream-router')();
 
 streamRouter.addRoute(':name/:start', connectToSynopsis);
 
-app.use('/', browserify('./public'));
+app.use('/', browserify('./public', { transform: ['brfs'] }));
 
 app.use(express.static(__dirname + '/public/'));
 
