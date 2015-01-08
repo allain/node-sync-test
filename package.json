@@ -33,7 +33,7 @@
     "mux-demux": "^3.7.9",
     "shoe": "0.0.15",
     "stream-router": "^0.1.0",
-    "synopsis": "~0.4.1",
+    "synopsis": "~0.5.1",
     "through2": "^0.6.3",
     "reconnect": "^2.0.2"
   },
