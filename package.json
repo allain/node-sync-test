@@ -34,11 +34,10 @@
     "shoe": "0.0.15",
     "stream-router": "^0.1.0",
     "synopsis": "~0.4.1",
-    "through2": "^0.6.3"
+    "through2": "^0.6.3",
+    "reconnect": "^2.0.2",
   },
   "devDependencies": {
-    "chai": "^1.10.0",
-    "reconnect": "^2.0.2",
-    "stdout": "0.0.3"
+    "chai": "^1.10.0"
   }
 }
