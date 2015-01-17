@@ -32,6 +32,10 @@ function Store(name, endPoint) {
     error: false
   });
 
+  setTimeout(function() {
+    self.emit('change', doc);
+  }, 0);
+
   var patchStream;
   reconnect(function (stream) {
     stream.pipe(mdm).pipe(stream);
@@ -39,13 +43,13 @@ function Store(name, endPoint) {
     patchStream = mdm.createStream(name + '/' + patchCount);
 
     this.patchStream = patchStream;
-    patchStream
-    .pipe(through2.obj(function(update, enc, next) {
+
+    patchStream.pipe(through2.obj(function(update, enc, next) {
       if (!Array.isArray(update)) {  
         debug('error notification received');
         console.error(update);
         return next();
-      });
+      }
 
       // update = [patch, end]
       debug('update received', update);
