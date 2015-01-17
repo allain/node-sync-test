@@ -14,6 +14,7 @@ function Store(name, endPoint) {
   if (typeof name !== 'string') throw new Error('store must be given a name');
   if (!/^[a-z][a-z0-9]*$/.test(name)) throw new Error('Invalid store name given');
 
+
   EventEmitter.call(this);
 
   var self = this;
@@ -27,22 +28,24 @@ function Store(name, endPoint) {
 
   var initialized = false;
 
-  
-  debug('emitting change', doc);
+  var mdm = MuxDemux({
+    error: false
+  });
 
   var patchStream;
-
   reconnect(function (stream) {
-    stream.write(name + '/' + patchCount);
+    stream.pipe(mdm).pipe(stream);
 
-    patchStream = stream;
+    patchStream = mdm.createStream(name + '/' + patchCount);
 
-    stream.pipe(through2.obj(function(update, enc, next) {
+    this.patchStream = patchStream;
+    patchStream
+    .pipe(through2.obj(function(update, enc, next) {
       if (!Array.isArray(update)) {  
         debug('error notification received');
         console.error(update);
         return next();
-      }
+      });
 
       // update = [patch, end]
       debug('update received', update);
@@ -58,13 +61,12 @@ function Store(name, endPoint) {
       next();
     }));
 
-    stream.on('error', function(err) {
+    patchStream.on('error', function(err) {
       console.log(err);
     });
 
     if (!initialized) {
       self.emit('ready');
-      self.emit('change', doc);
       initialized = false;
     }
   }).connect(endPoint);
