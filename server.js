@@ -1,25 +1,17 @@
+var debug = require('debug')('sync-server');
 var shoe = require('shoe');
+
 var mongojs = require('mongojs');
+var Synopsis = require('synopsis');
+var jiff = require('jiff');
+var express = require('express');
+
 
 var db = mongojs(process.env.MONGOLAB_URI || 'localhost/sync-test');
 
-var Synopsis = require('synopsis');
-var debug = require('debug')('sync-server');
-var jiff = require('jiff');
-
-var through2 = require('through2');
-
-var express = require('express');
 var app = express();
 
-var browserify = require('browserify-middleware');
-
-var MuxDemux = require('mux-demux');
-var streamRouter = require('stream-router')();
-
-streamRouter.addRoute(':name/:start', connectToSynopsis);
-
-app.use('/', browserify('./public', { transform: ['brfs'] }));
+app.use('/', require('browserify-middleware')('./public', { transform: ['brfs'] }));
 
 app.use(express.static(__dirname + '/public/'));
 
@@ -33,39 +25,35 @@ var server = app.listen(process.env.PORT || 3000, function () {
 var targets = {};
 
 shoe(function (stream) {
-  var mdm = MuxDemux({
-    error: false
-  });
+  stream.once('data', connectToSynopsis);
+  
+  function connectToSynopsis(meta) {
+    debug('meta received: ' + meta);
 
-  mdm.on("connection", streamRouter);
+    var metaParts = meta.split('/');
 
-  stream.pipe(mdm).pipe(stream);
+    var targetName = metaParts[0];
+    var start = metaParts[1];
+
+    stream.on('error', function(err) {
+      debug('stream error', err);
+    });
+
+    buildSynopsis(targetName, function(err, syn) {
+      if (err) {
+        debug('could not create synopsis', err);
+        stream.close();
+        return;
+      }
+
+      //TODO: handle errors way way better than this
+      syn.createStream(parseInt(start, 10), function(err, synStream) {
+        stream.pipe(synStream).pipe(stream);
+      });
+    });
+  }
 }).install(server, '/sync');
 
-function connectToSynopsis(stream) {
-  var metaParts = stream.meta.split('/');
-
-  var targetName = metaParts[0];
-  var start = metaParts[1];
-
-  stream.error(function(err) {
-    debug('stream error', err);
-  });
-
-  buildSynopsis(targetName, function(err, syn) {
-    if (err) {
-      debug('could not create synopsis', err);
-      stream.close();
-      return;
-    }
-
-    //TODO: handle errors way way better than this
-    syn.createStream(parseInt(start, 10), function(err, synStream) {
-      stream.pipe(synStream).pipe(stream);
-    });
-      
-  });
-}
 
 function buildSynopsis(targetName, cb) {
   var target = targets[targetName];

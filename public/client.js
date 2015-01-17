@@ -41,5 +41,3 @@ $("#app").on('change', '#json', function(e) {
   var newDoc = JSON.parse($(this).val());
   store.update(newDoc);
 });
-
-window.jiff = require('jiff');
