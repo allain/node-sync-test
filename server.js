@@ -52,59 +52,18 @@ function connectToSynopsis(stream) {
     debug('stream error', err);
   });
 
-  buildSynopsis(targetName, function(err, target) {
+  buildSynopsis(targetName, function(err, syn) {
     if (err) {
       debug('could not create synopsis', err);
       stream.close();
       return;
     }
 
-    //TODO: Make it buffer and then send any patches that come in during initialization
-
-    debug('getting client up to speed');
-    target.size(sendInitialUpdates);
-
-    function sendInitialUpdates(err, count) {
-      if (err) return debug('error', err);
-
-      target.delta(start, count, function(err, patch) {
-        if (err) return debug('error', err);
-
-        debug('sending initial updates');
-
-        stream.write([patch, count]);
-        target.on('patched', patchClient);
-
-        debug('listening for client patches');
-
-        stream.on('data', processClientPatch);
-      });
-
-      function processClientPatch(patch) {
-        debug('received data from client', patch);
-
-        if (patch.length === 0) {
-          debug('dropping empty patch');
-          return;
-        }
-        target.patch(patch, function(err) {
-          if (err) {
-            debug('unable to apply patch', err);
-          }
-        });
-      }
-
-      function patchClient(patch) {
-        debug('sending patch', patch);
-        stream.write([patch, ++count]);
-      }
-
-      stream.once('close', function() {
-        debug('uninstalling stream listeners');
-        target.removeListener('patched', patchClient);
-        stream.removeListener('data', processClientPatch);
-      });
-    }
+    //TODO: handle errors way way better than this
+    syn.createStream(parseInt(start, 10), function(err, synStream) {
+      stream.pipe(synStream).pipe(stream);
+    });
+      
   });
 }
 
@@ -152,5 +111,3 @@ function buildMongoStore(name) {
     }
   };
 }
-
-server.listen(3000);

@@ -41,17 +41,19 @@ function Store(name, endPoint) {
     this.patchStream = patchStream;
     patchStream
     .pipe(through2.obj(function(update, enc, next) {
+      if (!Array.isArray(update)) {  
+        debug('error notification received');
+        console.error(update);
+        return next();
+      });
+
       // update = [patch, end]
       debug('update received', update);
 
       self.emit('patch', update);
 
-      this.push(update[0]);
+      var newDoc = jiff.patch(update[0], doc);
       localStorage['store-' + name + '-end'] = update[1];
-      next();
-    }))
-    .pipe(jsonPatchStream.toDocs(doc))
-    .pipe(through2.obj(function(newDoc, enc, next) {
       localStorage['store-' + name] = JSON.stringify(newDoc);
       doc = newDoc;
 
