@@ -21,7 +21,6 @@ store.on('change', function(newDoc) {
 
 store.on('patch', function(update) {
   debug('patched', update);
-  updateUI();
 });
 
 function updateUI() {
