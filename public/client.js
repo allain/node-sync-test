@@ -35,6 +35,8 @@ app.on('click', '#add-todo').pipe(writable({objectMode: true}, function(e, encod
 
 function addTodo() {
   var title = $('#new-todo').val().trim();
+  $('#new-todo').val('');
+  
   if (title) {
     store.edit(function(state) {
       state.todos = state.todos || [];
