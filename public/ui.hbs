@@ -1,19 +1,21 @@
-<h2>Todos</h2>
+<div id="todos-block">
+  <h2>Todos</h2>
 
-<ul class="todos">
-  <li><input type="text" placeholder="add todo item" id="new-todo" autofocus><button id="add-todo">Add</button></li>
-  {{#each todos}}
-    <li data-id="{{id}}"><input type="checkbox" class="completed" /> {{title}}</li>
-  {{/each}}
-</ul>
+  <ul class="todos">
+    <li><input type="text" placeholder="add todo item" id="new-todo" autofocus /><button id="add-todo">Add</button></li>
+    {{#each todos}}
+      <li data-id="{{id}}"><input type="checkbox" class="completed" /> {{title}}</li>
+    {{/each}}
+  </ul>
 
-<style>
-.todos {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.todos li {
-  list-style: none;
-}
-</style>
+  <style>
+  .todos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .todos li {
+    list-style: none;
+  }
+  </style>
+</div>

@@ -18,8 +18,7 @@ store.on('change', function(appState) {
   debug('changed', appState);
 
   var newHtml = ui(appState);
-  console.log(newHtml);
-  
+
   if (uiPatcher) {
     uiPatcher.write(newHtml);
   } else {
