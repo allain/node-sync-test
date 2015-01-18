@@ -1,5 +1,5 @@
 {
-  "name": "synopsis-example"
+  "name": "synopsis-example",
   "version": "0.1.0",
   "description": "An example of using synopsis-client and synopsis-backend to perform data storage and synchronization",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/allain/node-synopsis-example
+    "url": "https://github.com/allain/node-synopsis-example"
   },
   "keywords": [
     "synchronization"
