@@ -1,7 +1,6 @@
-# sync-test
+# synopsis-example
 
-Testing the practicality of using scuttlebutt to provide offline synchronization for browsers.
-
+An example of using synopsis-client and synopsis-backend to perform data storage and synchronization
 
 ## Trying it out
 
