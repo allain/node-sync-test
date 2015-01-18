@@ -43,16 +43,16 @@ $("#app").on('click', '#add-todo', function(e) {
 function addTodo() {
   var title = $('#new-todo').val().trim();
   if (title) {
-    var newState = JSON.parse(JSON.stringify(appState));
-    newState.todos = newState.todos || [];
-    newState.todos.unshift({id: Date.now(), title: title});
-    store.update(newState);
+    store.edit(function(state) {
+      state.todos = state.todos || [];
+      state.todos.unshift({id: Date.now(), title: title});
+    });
   }
 }
 
 $("#app").on('click', '.completed', function(e) {
   var id = $(this).parent().attr('data-id');
-  var newState = JSON.parse(JSON.stringify(appState));
-  newState.todos = (newState.todos || []).filter(function(t) { return t.id != id; });
-  store.update(newState);
+  store.edit(function(state) {
+    state.todos = state.todos.filter(function(t) { return t.id != id; }); 
+  });
 });
