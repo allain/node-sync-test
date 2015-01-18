@@ -1,12 +1,13 @@
 // file: client.js
 var debug = require('debug')('sync-client');
 
-var Store = require('./store');
+var SynopsisClient= require('synopsis-client');
+
 var Handlebars = require('handlebars');
 var fs = require('fs');
 var $ = require('jquery');
 
-var store = window.test = new Store('test');
+var store = window.test = new SynopsisClient('test');
 
 store.on('ready', function() {
   debug('store ready');

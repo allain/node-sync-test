@@ -13,5 +13,5 @@ var server = app.listen(process.env.PORT || 3000, function () {
   console.log('Example app listening at http://%s:%s', host, port);
 });
 
-require('./synopsis-backend')(server);
+require('synopsis-backend')(server);
 
