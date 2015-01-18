@@ -11,21 +11,25 @@ var store = window.test = new SynopsisClient('test');
 
 var ui = Handlebars.compile(fs.readFileSync(__dirname + '/ui.hbs', 'utf8'));
 
-var appState = {};
+var HtmlPatcherStream = require('html-patcher-stream');
+var uiPatcher;
 
-store.on('change', function(newDoc) {
-  debug('changed', newDoc);
-  appState = newDoc;
-  updateUI();
+store.on('change', function(appState) {
+  debug('changed', appState);
+
+  var newHtml = ui(appState);
+  console.log(newHtml);
+  
+  if (uiPatcher) {
+    uiPatcher.write(newHtml);
+  } else {
+    uiPatcher = HtmlPatcherStream(document.getElementById('app'), newHtml);
+  }
 });
 
 store.on('patch', function(update) {
   debug('patched', update);
 });
-
-function updateUI() {
-  $('#app').html(ui(appState));
-}
 
 $("#app").on('keyup', '#new-todo', function(e) {
   if (e.keyCode !== 13) return;
@@ -53,6 +57,6 @@ function addTodo() {
 $("#app").on('click', '.completed', function(e) {
   var id = $(this).parent().attr('data-id');
   store.edit(function(state) {
-    state.todos = state.todos.filter(function(t) { return t.id != id; }); 
+    state.todos = state.todos.filter(function(t) { return t.id != id; });
   });
 });
