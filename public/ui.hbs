@@ -1,20 +1,19 @@
-<textarea id="json">{{json}}</textarea>
+<h2>Todos</h2>
 
-<dl class="updates">
-{{#each updates}}
-  <dt>{{index}}</dt>
-  <dd>{{patch}}</dd>
-{{/each}}
-</dl>
+<ul class="todos">
+  <li><input type="text" placeholder="add todo item" id="new-todo"><button id="add-todo">Add</button></li>
+  {{#each todos}}
+    <li data-id="{{id}}"><input type="checkbox" class="completed" /> {{title}}</li>
+  {{/each}}
+</ul>
 
 <style>
-#json {
-  width: 100%;
-  height: 6em;
+.todos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-.updates dd {
-  color: #333;
-}
-.update dt{
+.todos li {
+  list-style: none;
 }
 </style>

@@ -9,36 +9,51 @@ var $ = require('jquery');
 
 var store = window.test = new SynopsisClient('test');
 
-store.on('ready', function() {
-  debug('store ready');
-});
-
 var ui = Handlebars.compile(fs.readFileSync(__dirname + '/ui.hbs', 'utf8'));
 
-var uiState = {
-  json: "{}",
-  updates: []
-};
+var appState = {};
 
 store.on('change', function(newDoc) {
-  uiState.json = JSON.stringify(newDoc);
+  debug('changed', newDoc);
+  appState = newDoc;
   updateUI();
 });
 
 store.on('patch', function(update) {
-  uiState.updates.push({
-    patch: JSON.stringify(update[0]),
-    index: update[1]
-  });
-
+  debug('patched', update);
   updateUI();
 });
 
 function updateUI() {
-  $('#app').html(ui(uiState));
+  $('#app').html(ui(appState));
 }
 
-$("#app").on('change', '#json', function(e) {
-  var newDoc = JSON.parse($(this).val());
-  store.update(newDoc);
+$("#app").on('keyup', '#new-todo', function(e) {
+  if (e.keyCode !== 13) return;
+  e.preventDefault();
+
+  addTodo();
+});
+
+$("#app").on('click', '#add-todo', function(e) {
+  addTodo();
+});
+
+
+
+function addTodo() {
+  var title = $('#new-todo').val().trim();
+  if (title) {
+    var newState = JSON.parse(JSON.stringify(appState));
+    newState.todos = newState.todos || [];
+    newState.todos.unshift({id: Date.now(), title: title});
+    store.update(newState);
+  }
+}
+
+$("#app").on('click', '.completed', function(e) {
+  var id = $(this).parent().attr('data-id');
+  var newState = JSON.parse(JSON.stringify(appState));
+  newState.todos = (newState.todos || []).filter(function(t) { return t.id != id; });
+  store.update(newState);
 });
