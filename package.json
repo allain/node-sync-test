@@ -5,12 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production node server.js",
-    "dev": "NODE_ENV=development node server.js",
-    "test": "mocha tests"
+    "dev": "NODE_ENV=development node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/allain/node-sync-test"
+    "url": "https://github.com/allain/node-synopsis-example
   },
   "keywords": [
     "synchronization"
@@ -18,7 +17,7 @@
   "author": "Allain Lalonde <allain.lalonde@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/allain/node-sync-test/issues"
+    "url": "https://github.com/allain/node-synopsis-example/issues"
   },
   "dependencies": {
     "brfs": "^1.2.0",
