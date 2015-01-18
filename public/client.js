@@ -3,32 +3,17 @@ var debug = require('debug')('sync-client');
 
 var SynopsisClient= require('synopsis-client');
 
-var Handlebars = require('handlebars');
+var Handlebars = require('handlebars-stream');
+
 var fs = require('fs');
 var $ = require('jquery');
 
 var store = window.test = new SynopsisClient('test');
 
-var ui = Handlebars.compile(fs.readFileSync(__dirname + '/ui.hbs', 'utf8'));
-
 var HtmlPatcherStream = require('html-patcher-stream');
-var uiPatcher;
 
-store.on('change', function(appState) {
-  debug('changed', appState);
-
-  var newHtml = ui(appState);
-
-  if (uiPatcher) {
-    uiPatcher.write(newHtml);
-  } else {
-    uiPatcher = HtmlPatcherStream(document.getElementById('app'), newHtml);
-  }
-});
-
-store.on('patch', function(update) {
-  debug('patched', update);
-});
+store.pipe(Handlebars(fs.readFileSync(__dirname + '/ui.hbs', 'utf8')))
+  .pipe(HtmlPatcherStream(document.getElementById('app'), '<div></div>'));
 
 $("#app").on('keyup', '#new-todo', function(e) {
   if (e.keyCode !== 13) return;
@@ -40,8 +25,6 @@ $("#app").on('keyup', '#new-todo', function(e) {
 $("#app").on('click', '#add-todo', function(e) {
   addTodo();
 });
-
-
 
 function addTodo() {
   var title = $('#new-todo').val().trim();
