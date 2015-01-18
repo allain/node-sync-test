@@ -4,7 +4,7 @@
   <ul class="todos">
     <li><input type="text" placeholder="add todo item" id="new-todo" autofocus /><button id="add-todo">Add</button></li>
     {{#each todos}}
-      <li data-id="{{id}}"><input type="checkbox" class="completed" /> {{title}}</li>
+      <li><input type="checkbox" class="completed" data-id="{{id}}" /> {{title}}</li>
     {{/each}}
   </ul>
 
