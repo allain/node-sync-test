@@ -29,9 +29,12 @@ $("body").delegate('#logout', 'click', function(e) {
 	hello.logout();
 });
 
+var authed = false;
 appState.write({authed: false});
 
+
 hello.on('auth.login', function(auth){
+  authed = true;
   // call user information, for the given network
 	hello(auth.network).api( '/me' ).then( function(r) {
     appState.write({
@@ -42,11 +45,18 @@ hello.on('auth.login', function(auth){
 });
 
 hello.on('auth.logout', function(){
+  authed = true;
   appState.write({
 		profile: null,
     authed: true
   });
 });
+
+setTimeout(function() {
+  if (!authed) {
+    appState.write({authed: true});
+  }
+}, 500);
 
 hello.init({ 
 	google: '100706142658-6iaoqf1pak20cso1shbq7slsmrcaeis6.apps.googleusercontent.com'
