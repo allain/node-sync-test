@@ -1,3 +1,15 @@
+<div id="container">
+{{#if authed}}
+	<div id="profile">
+		{{#if profile}}
+			<img src="{{profile.thumbnail}}" /> Hey {{profile.name}}, <a href="#" id="logout">Logout</a>
+		{{else}}
+			<button id="google-login">Login with Google</button>
+		{{/if}}
+	</div>
+{{/if}}
+
+
 <div id="todos-block">
   <h2>Global Todos</h2>
 
@@ -18,4 +30,5 @@
     list-style: none;
   }
   </style>
+</div>
 </div>
