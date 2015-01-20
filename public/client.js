@@ -13,13 +13,20 @@ var store = window.test = new SynopsisClient('test');
 var writable = require('writable');
 
 var $ = require('jquery');
-var HtmlPatcherStream = require('html-patcher-stream');
 
-var mergeStream = require('object-merge-stream');
+var HtmlPatcherStream = require('html-patcher-stream');
 
 var hello = window.hello = require('hellojs');
 
-var appState = mergeStream({});
+// TODO: Refactor this out to a package
+var appData = {}
+var appState = through(function(chunk, enc, cb) {
+  Object.keys(chunk).forEach(function(key) {
+    appData[key] = chunk[key];
+	});
+  this.push(appData);
+  cb();
+});
 
 $("body").delegate('#google-login', 'click', function(e) {
 	hello('google').login();
