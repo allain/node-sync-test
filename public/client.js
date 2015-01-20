@@ -36,34 +36,28 @@ $("body").delegate('#logout', 'click', function(e) {
 	hello.logout();
 });
 
-var authed = false;
-appState.write({authed: false});
+var profile = JSON.parse(localStorage['profile'] || 'false');
 
+appState.write({
+	profile: profile 
+});
 
 hello.on('auth.login', function(auth){
-  authed = true;
   // call user information, for the given network
 	hello(auth.network).api( '/me' ).then( function(r) {
+    localStorage['profile'] = JSON.stringify(r);
     appState.write({
-		  authed: true,	
 			profile: r
 		});
 	});
 });
 
 hello.on('auth.logout', function(){
-  authed = true;
+  localStorage['profile'] = JSON.stringify(r);
   appState.write({
-		profile: null,
-    authed: true
+		profile: null
   });
 });
-
-setTimeout(function() {
-  if (!authed) {
-    appState.write({authed: true});
-  }
-}, 500);
 
 hello.init({ 
 	google: '100706142658-6iaoqf1pak20cso1shbq7slsmrcaeis6.apps.googleusercontent.com'
