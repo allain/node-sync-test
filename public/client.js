@@ -16,21 +16,19 @@ var $ = require('jquery');
 var HtmlPatcherStream = require('html-patcher-stream');
 
 store.pipe(Handlebars(fs.readFileSync(__dirname + '/ui.hbs', 'utf8')))
-  .pipe(HtmlPatcherStream(document.getElementById('app'), '<div></div>'));
+  .pipe(HtmlPatcherStream(document.getElementById('app')));
 
 var app = DomDelegate(document.getElementById('app'));
-app.on('keyup', '#new-todo').pipe(writable({objectMode: true}, function(e, encoding, cb) {
+app.on('keyup', '#new-todo').pipe(writable({objectMode: true}, function(e) {
   if (e.keyCode != 13) return;
 
   e.preventDefault();
 
   addTodo();
-  cb();
 }));
 
-app.on('click', '#add-todo').pipe(writable({objectMode: true}, function(e, encoding, cb) {
+app.on('click', '#add-todo').pipe(writable({objectMode: true}, function(e) {
   addTodo();
-  cb();
 }));
 
 function addTodo() {
