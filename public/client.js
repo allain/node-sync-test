@@ -29,12 +29,12 @@ $("body").delegate('#logout', 'click', function(e) {
 	hello.logout();
 });
 
-appState.push({authed: false});
+appState.write({authed: false});
 
 hello.on('auth.login', function(auth){
   // call user information, for the given network
 	hello(auth.network).api( '/me' ).then( function(r) {
-    appState.push({
+    appState.write({
 		  authed: true,	
 			profile: r
 		});
@@ -42,7 +42,7 @@ hello.on('auth.login', function(auth){
 });
 
 hello.on('auth.logout', function(){
-  appState.push({
+  appState.write({
 		profile: null,
     authed: true
   });
@@ -56,11 +56,11 @@ hello.init({
  
 store
 .pipe(appState)
-.pipe(through(function(chunk, enc, cb) {
+/*.pipe(through(function(chunk, enc, cb) {
   console.log(chunk); 
   this.push(chunk);
 	cb();
-}))
+}))*/
 .pipe(Handlebars(fs.readFileSync(__dirname + '/ui.hbs', 'utf8')))
 .pipe(HtmlPatcherStream(document.getElementById('app')));
 
