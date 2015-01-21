@@ -12,7 +12,7 @@ var DomDelegate = require('dom-delegate-stream');
 
 var store = window.test = new SynopsisClient('test');
 var writable = require('writable');
-var mergeStream = require('object-merge-stream');
+var toProp = require('make-prop-stream');
 var $ = require('jquery');
 
 var HtmlPatcherStream = require('html-patcher-stream');
@@ -22,7 +22,6 @@ var auth = new Auth({
 	google: '100706142658-6iaoqf1pak20cso1shbq7slsmrcaeis6.apps.googleusercontent.com'
 });
 
-//var appState = mergeStream({depth: 1}); 
 var appData = {}
 var appState = through2(function(chunk, enc, cb) {
   Object.keys(chunk).forEach(function(key) {
@@ -34,14 +33,6 @@ var appState = through2(function(chunk, enc, cb) {
 
 auth.pipe(toProp('auth')).pipe(appState);
 
-function toProp(name) {
-  return through2(function(chunk, enc, cb) {
-    var doc = {};
-    doc[name] = chunk;
-    this.push(doc);
-		cb();
-  });
-}
  
 store
 	.pipe(toProp('global'))
