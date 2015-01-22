@@ -26,6 +26,7 @@ function Auth(config) {
 		auth: JSON.parse(localStorage['auth'] || 'false'),
     profile: JSON.parse(localStorage['profile'] || 'false')
 	};
+
   setTimeout(function() {
 		self.push(auth);
 	}, 0);
@@ -33,10 +34,11 @@ function Auth(config) {
 	hello.on('auth.login', function(response){
     auth['auth'] = response;
     localStorage['auth'] = JSON.stringify(response);
+
 		// call user information, for the given network
-		hello(auth.network).api( '/me' ).then( function(r) {
-      console.log('profile', r);
-			localStorage['profile'] = JSON.stringify(r);
+		hello(response.network).api( '/me' ).then( function(profile) {
+			localStorage['profile'] = JSON.stringify(profile);
+			auth['profile'] = profile;
 			self.push(auth);
 		});
 	});
@@ -44,7 +46,9 @@ function Auth(config) {
 	hello.on('auth.logout', function(){
 		localStorage['auth'] = 'false'; 
 		localStorage['profile'] = 'false'; 
-    auth = {};
+    auth.profile = false;
+    auth.auth = false;
+
 		self.push(auth);
 	});
 
