@@ -4,7 +4,7 @@
   "description": "An example of using synopsis-client and synopsis-backend to perform data storage and synchronization",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production node server.js",
+    "start": "NODE_ENV=development node server.js",
     "dev": "NODE_ENV=development node server.js"
   },
   "repository": {
