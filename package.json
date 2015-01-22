@@ -22,7 +22,7 @@
   "dependencies": {
     "JSONStream": "^0.10.0",
     "brfs": "^1.2.0",
-    "browserify-middleware": "^4.1.0",
+    "browserify-middleware": "git://github.com/allain/browserify-middleware.git#master",
     "debug": "^2.1.1",
     "dom-delegate-stream": "^1.0.0",
     "dynamic-duplex": "^1.0.0",
