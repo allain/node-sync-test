@@ -3,7 +3,9 @@ var app = express();
 var debug = require('debug')('synopsis-example');
 
 var browserify = require('browserify-middleware');
-app.use('/', browserify('./public', { transform: ['brfs'] }));
+app.use('/', browserify('./public', { 
+	transform: ['brfs'] 
+}));
 
 app.use(express.static(__dirname + '/public/'));
 

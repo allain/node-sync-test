@@ -1,7 +1,8 @@
 var Readable = require('stream').Readable;
 var util = require('util');
 
-var hello = window.hello = require('hellojs');
+var hello = require('hellojs');
+window.hello = hello;
 var $ = require('jquery');
 
 module.exports = Auth;

@@ -11,7 +11,8 @@ var Handlebars = require('handlebars-stream');
 
 var DomDelegate = require('dom-delegate-stream');
 
-var store = window.test = new SynopsisClient('test');
+var store = new SynopsisClient('test');
+window.store = store;
 var personalStore = new SynopsisClient.Personal('personal');
 
 var writable = require('writable');
