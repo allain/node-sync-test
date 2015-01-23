@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var shoe = require('shoe');
 var debug = require('debug')('synopsis-example');
 
 var browserify = require('browserify-middleware');
@@ -16,9 +17,16 @@ var server = app.listen(process.env.PORT || 3000, function() {
   console.log('Example app listening at http://%s:%s', host, port);
 });
 
-require('synopsis-backend')(server, {
-  authenticator: function(auth, cb) {
-    debug('faking success of authing ', auth);
-    cb();
-  }
+var SynopsisBackend = require('synopsis-backend');
+
+var backend = new SynopsisBackend({
+	authenticator: function(auth, cb) {
+		debug('faking success of authing ', auth);
+		cb();
+	}
 });
+
+
+shoe(function(stream) {
+  stream.pipe(backend.createStream()).pipe(stream);
+}).install(server, '/sync');

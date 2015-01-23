@@ -95,6 +95,7 @@ function addTodo(store, title) {
   if (title) {
     store.edit(function(state) {
       state.todos = state.todos || [];
+
       state.todos.unshift({
         id: Date.now(),
         title: title
