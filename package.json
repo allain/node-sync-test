@@ -33,6 +33,7 @@
     "handlebars-stream": "^1.4.0",
     "hellojs": "^1.4.1",
     "html-patcher-stream": "^1.1.0",
+    "hyperquest": "^1.0.1",
     "jquery": "^2.1.3",
     "make-prop-stream": "^1.0.0",
     "shoe": "0.0.15",
