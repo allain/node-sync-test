@@ -4,6 +4,8 @@ var shoe = require('shoe');
 var debug = require('debug')('synopsis-example');
 var hyperquest = require('hyperquest');
 var browserify = require('browserify-middleware');
+var JSONStream = require('JSONStream');
+
 app.use('/', browserify('./public', {
   transform: ['brfs']
 }));
@@ -19,33 +21,18 @@ var server = app.listen(process.env.PORT || 3000, function() {
 
 var SynopsisBackend = require('synopsis-backend');
 
-var authCache = {};
 var backend = new SynopsisBackend({
   authenticator: function(auth, cb) {
     if (auth.access_token && auth.network === 'google') {
-      var authed = (authCache[auth.network + '-' + auth.access_token]);
-      if (authed !== void 0) {
-        if (authed) {
-          return cb(null);
-        } else {
-          return cb('Invaid Auth Token');
-        }
-      }
+      return hyperquest('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=' + auth.access_token)
+        .pipe(JSONStream.parse()).once('data', function(response) {
+          debug('google tokeninfo response', response);
+          if (response.error) {
+            return cb(new Error(response.error));
+          }
 
-      return hyperquest('https://www.googleapis.com/plus/v1/people/me?access_token=' + auth.access_token, function(err, resp, body) {
-        var error = null;
-
-        debug(resp);
-        debug(body);
-
-        if (resp.statusCode >= 400) {
-          error = new Error('Invalid Auth Token');
-        }
-
-        authCache[auth.network + '-' + auth.access_token] = !error;
-
-        return cb(error);
-      });
+          cb();
+        });
     }
 
     cb(new Error('Unrecognized Auth type'));

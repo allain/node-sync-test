@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production node server.js",
-    "dev": "NODE_ENV=development node server.js",
+    "dev": "NODE_ENV=development nodemon server.js",
     "test": "node_modules/mocha/bin/mocha test",
     "format": "find . -name '*.js' -not -path './node_modules/*' | xargs node_modules/js-beautify/js/bin/js-beautify.js --replace"
   },
@@ -37,8 +37,8 @@
     "jquery": "^2.1.3",
     "make-prop-stream": "^1.0.0",
     "shoe": "0.0.15",
-    "synopsis-backend": "^0.6.2",
-    "synopsis-client": "^0.7.4",
+    "synopsis-backend": "^0.7.0",
+    "synopsis-client": "^0.8.0",
     "through2": "^0.6.3",
     "writable": "^0.1.0"
   },

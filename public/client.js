@@ -85,7 +85,6 @@ app.on('click', '#global-todos .add-todo').pipe(writable({
 app.on('click', '#personal-todos .add-todo').pipe(writable({
   objectMode: true
 }, function(e) {
-  console.log(personalStore);
   addTodo(personalStore, $('#personal-todos .new-todo').val().trim());
 }));
 
