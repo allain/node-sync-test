@@ -15,9 +15,8 @@ function Auth(config) {
     objectMode: true
   });
 
-  var reloginTimer;
-
   this._read = function() {};
+  
   var google = hello('google');
   window.google = google;
 
@@ -32,8 +31,8 @@ function Auth(config) {
   });
 
   var auth = {
-    auth: false,
-    profile: JSON.parse(localStorage['profile'] || 'false')
+    auth: JSON.parse(localStorage.getItem('auth') || 'false'),
+    profile: JSON.parse(localStorage.getItem('profile') || 'false')
   };
 
   setTimeout(function() {
@@ -42,6 +41,7 @@ function Auth(config) {
 
   hello.on('auth.login', function(response) {
     auth['auth'] = response;
+    localStorage.setItem('auth', JSON.stringify(response));
 
     // call user information, for the given network
     hello(response.network).api('/me').then(function(profile) {
@@ -52,9 +52,12 @@ function Auth(config) {
   });
 
   hello.on('auth.logout', function() {
+    localStorage['auth'] = 'false';
     localStorage['profile'] = 'false';
-    auth.profile = false;
-    auth.auth = false;
+    auth = {
+			auth: false,
+			profile: false
+		}
 
     self.push(auth);
   });
