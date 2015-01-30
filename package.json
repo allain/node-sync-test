@@ -1,6 +1,6 @@
 {
   "name": "synopsis-example",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An example of using synopsis-client and synopsis-backend to perform data storage and synchronization",
   "main": "index.js",
   "scripts": {
