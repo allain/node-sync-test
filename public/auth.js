@@ -16,7 +16,7 @@ function Auth(config) {
   });
 
   this._read = function() {};
-  
+
   var google = hello('google');
   window.google = google;
 
@@ -55,9 +55,9 @@ function Auth(config) {
     localStorage['auth'] = 'false';
     localStorage['profile'] = 'false';
     auth = {
-			auth: false,
-			profile: false
-		}
+      auth: false,
+      profile: false
+    }
 
     self.push(auth);
   });
