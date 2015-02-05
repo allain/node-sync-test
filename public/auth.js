@@ -1,6 +1,6 @@
 var Readable = require('stream').Readable;
 var util = require('util');
-
+var debug = require('debug')('auth');
 var hello = require('hellojs');
 window.hello = hello;
 var $ = require('jquery');
@@ -11,6 +11,7 @@ util.inherits(Auth, Readable);
 
 function Auth(config) {
   var self = this;
+
   Readable.call(this, {
     objectMode: true
   });
@@ -19,6 +20,10 @@ function Auth(config) {
 
   var google = hello('google');
   window.google = google;
+
+  self.logout = function() {
+    hello.logout();
+  };
 
   $('body').delegate('#google-login', 'click', function(e) {
     google.login({

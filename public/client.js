@@ -12,18 +12,25 @@ var Handlebars = require('handlebars-stream');
 var DomDelegate = require('dom-delegate-stream');
 
 var store = new SynopsisClient('test');
+
+var Auth = require('./auth.js');
+var auth = new Auth({
+  google: '100706142658-6iaoqf1pak20cso1shbq7slsmrcaeis6.apps.googleusercontent.com'
+});
+
 var personalStore = new SynopsisClient.Personal('personal');
+
+personalStore.on('bootstrap-error', function(err) {
+  if (err.cause === 'session not found') {
+    auth.logout();
+  }
+});
 
 var writable = require('writable');
 var toProp = require('make-prop-stream');
 var $ = require('jquery');
 
 var HtmlPatcherStream = require('html-patcher-stream');
-
-var Auth = require('./auth.js');
-var auth = new Auth({
-  google: '100706142658-6iaoqf1pak20cso1shbq7slsmrcaeis6.apps.googleusercontent.com'
-});
 
 var appData = {}
 var appState = through2(function(chunk, enc, cb) {

@@ -22,6 +22,7 @@ var server = app.listen(process.env.PORT || 3000, function() {
 var SynopsisBackend = require('synopsis-backend');
 
 var backend = new SynopsisBackend({
+  makeStore: require('./mongo-store-maker.js'),
   authenticator: function(auth, cb) {
     if (auth.access_token && auth.network === 'google') {
       return hyperquest('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=' + auth.access_token)
@@ -39,6 +40,8 @@ var backend = new SynopsisBackend({
   }
 });
 
-shoe(function(stream) {
-  stream.pipe(backend.createStream()).pipe(stream);
-}).install(server, '/sync');
+backend.on('ready', function() {
+  shoe(function(stream) {
+    stream.pipe(backend.createStream()).pipe(stream);
+  }).install(server, '/sync');
+});
