@@ -39,7 +39,7 @@
     "mongojs": "^0.18.1",
     "shoe": "0.0.15",
     "synopsis-backend": "^0.9.1",
-    "synopsis-client": "^0.8.0",
+    "synopsis-client": "^0.8.1",
     "through2": "^0.6.3",
     "writable": "^0.1.0"
   },
